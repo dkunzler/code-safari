@@ -17,6 +17,7 @@ public class Snippet extends RealmObject {
     private String user;
     private String repository;
     private String commitId;
+    private String language;
     private int startLine;
     private int numberOfLines;
     private int elegance;
