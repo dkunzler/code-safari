@@ -21,4 +21,5 @@ public class Snippet extends RealmObject {
     private int startLine;
     private int numberOfLines;
     private int elegance;
+    private String content;
 }

@@ -9,7 +9,6 @@
     tools:context="de.devland.coder.MainActivity">
 
     <TextView
-        android:text="TextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/textView_code"
