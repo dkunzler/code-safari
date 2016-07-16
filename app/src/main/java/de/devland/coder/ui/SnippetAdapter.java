@@ -3,7 +3,6 @@ package de.devland.coder.ui;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +16,11 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Random;
 
+import javax.inject.Inject;
+
 import de.devland.coder.R;
+import de.devland.coder.di.ForBackground;
+import de.devland.coder.di.ForMain;
 import de.devland.coder.http.Commit;
 import de.devland.coder.http.File;
 import de.devland.coder.http.GitHubApiService;
@@ -25,38 +28,31 @@ import de.devland.coder.http.GitHubDownloadService;
 import de.devland.coder.http.Repository;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * Created by deekay on 13.07.2016.
  */
 public class SnippetAdapter extends BaseAdapter {
 
-    private final Activity activity;
+    @Inject
+    protected Activity activity;
+    @Inject
+    protected LayoutInflater inflater;
 
-    private GitHubDownloadService gitHubDownloadService;
-    private GitHubApiService gitHubApiService;
+    @Inject
+    protected GitHubDownloadService gitHubDownloadService;
+    @Inject
+    protected GitHubApiService gitHubApiService;
 
-    private Handler backgroundHandler;
+    @Inject
+    @ForBackground
+    protected Handler backgroundHandler;
+    @Inject
+    @ForMain
+    protected Handler mainHandler;
 
-    public SnippetAdapter(Activity activity) {
-        this.activity = activity;
-
-        Retrofit apiRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com/")
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        Retrofit downloadRetrofit = new Retrofit.Builder()
-                .baseUrl("https://raw.githubusercontent.com/")
-                .build();
-
-        gitHubApiService = apiRetrofit.create(GitHubApiService.class);
-        gitHubDownloadService = downloadRetrofit.create(GitHubDownloadService.class);
-
-        HandlerThread backgroundThread = new HandlerThread("network");
-        backgroundThread.start();
-        backgroundHandler = new Handler(backgroundThread.getLooper());
+    @Inject
+    public SnippetAdapter() {
     }
 
     public static class ViewHolder {
@@ -84,8 +80,6 @@ public class SnippetAdapter extends BaseAdapter {
         final ViewHolder viewHolder;
 
         if (rowView == null) {
-
-            LayoutInflater inflater = LayoutInflater.from(activity);
             rowView = inflater.inflate(R.layout.item, parent, false);
             // configure view holder
             viewHolder = new ViewHolder();
@@ -101,7 +95,7 @@ public class SnippetAdapter extends BaseAdapter {
             @Override
             public void run() {
                 final String snippet = getRandomCodeSnippet(0);
-                activity.runOnUiThread(new Runnable() {
+                mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.hide();

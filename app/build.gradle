@@ -48,5 +48,8 @@ dependencies {
 
     compile 'com.lorentzos.swipecards:library:1.0.9@aar'
 
+    compile 'com.google.dagger:dagger:2.5'
+    apt 'com.google.dagger:dagger-compiler:2.5'
+
     testCompile 'junit:junit:4.12'
 }

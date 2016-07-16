@@ -8,24 +8,31 @@ import android.widget.Toast;
 
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
+import javax.inject.Inject;
+
+import de.devland.coder.App;
 import de.devland.coder.R;
+import de.devland.coder.di.components.ActivityComponent;
+import de.devland.coder.di.modules.ActivityModule;
 
 /**
  * Created by deekay on 13.07.2016.
  */
 
 public class SwipeActivity extends AppCompatActivity {
+    private ActivityComponent activityComponent;
 
     private SwipeFlingAdapterView flingContainer;
-    private SnippetAdapter adapter;
+    @Inject
+    protected SnippetAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
+        getActivityComponent().inject(this);
 
         flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
-        adapter = new SnippetAdapter(this);
         flingContainer.setAdapter(adapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
@@ -57,6 +64,17 @@ public class SwipeActivity extends AppCompatActivity {
                 view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
+    }
+
+    public ActivityComponent getActivityComponent() {
+        if (activityComponent == null) {
+            synchronized (this) {
+                if (activityComponent == null) {
+                    activityComponent = (App.get().getApplicationComponent().activityComponent(new ActivityModule(this)));
+                }
+            }
+        }
+        return activityComponent;
     }
 
 }
