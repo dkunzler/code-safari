@@ -8,10 +8,12 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import de.devland.coder.App;
+import de.devland.coder.DefaultPrefs;
 import de.devland.coder.di.ForBackground;
 import de.devland.coder.di.ForMain;
 import de.devland.coder.http.GitHubApiService;
 import de.devland.coder.http.GitHubDownloadService;
+import de.devland.esperandro.Esperandro;
 import lombok.RequiredArgsConstructor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -28,6 +30,11 @@ public class ApplicationModule {
     @Provides
     App provideApp() {
         return app;
+    }
+
+    @Provides
+    DefaultPrefs provideDefaultPrefs() {
+        return Esperandro.getPreferences(DefaultPrefs.class, app);
     }
 
     @Provides

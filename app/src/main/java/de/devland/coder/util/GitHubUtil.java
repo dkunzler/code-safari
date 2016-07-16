@@ -10,6 +10,7 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
+import de.devland.coder.DefaultPrefs;
 import de.devland.coder.http.Commit;
 import de.devland.coder.http.File;
 import de.devland.coder.http.GitHubApiService;
@@ -23,6 +24,9 @@ import okhttp3.ResponseBody;
  */
 
 public class GitHubUtil {
+
+    @Inject
+    protected DefaultPrefs defaultPrefs;
 
     @Inject
     protected GitHubDownloadService gitHubDownloadService;
@@ -40,7 +44,7 @@ public class GitHubUtil {
         }
         recursionCounter++;
 
-        String auth = "Basic " + Base64.encodeToString(String.format("%s:%s", "dkunzler", GitHubApiService.TOKEN).getBytes(), Base64.NO_WRAP);
+        String auth = "Basic " + Base64.encodeToString(String.format("%s:%s", defaultPrefs.githubUser(), defaultPrefs.githubToken()).getBytes(), Base64.NO_WRAP);
         Random rand = new Random();
 
         List<Repository> items;
@@ -74,7 +78,7 @@ public class GitHubUtil {
         String[] lines = fullCode.split("\\n");
 
         int startLine = rand.nextInt(lines.length);
-        int endLine = Math.min(startLine + 15, lines.length - 1);
+        int endLine = Math.min(startLine + defaultPrefs.numberOfLines(), lines.length - 1);
 
         StringBuilder result = new StringBuilder();
         for (int i = startLine; i <= endLine; i++) {
