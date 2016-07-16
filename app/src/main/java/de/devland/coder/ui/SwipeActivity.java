@@ -10,6 +10,8 @@ import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.devland.coder.App;
 import de.devland.coder.R;
 import de.devland.coder.di.components.ActivityComponent;
@@ -22,6 +24,7 @@ import de.devland.coder.di.modules.ActivityModule;
 public class SwipeActivity extends AppCompatActivity {
     private ActivityComponent activityComponent;
 
+    @BindView(R.id.frame)
     private SwipeFlingAdapterView flingContainer;
     @Inject
     protected SnippetAdapter adapter;
@@ -31,8 +34,8 @@ public class SwipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_swipe);
         getActivityComponent().inject(this);
+        ButterKnife.bind(this);
 
-        flingContainer = (SwipeFlingAdapterView) findViewById(R.id.frame);
         flingContainer.setAdapter(adapter);
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override

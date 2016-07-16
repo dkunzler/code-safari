@@ -11,6 +11,8 @@ import android.widget.TextView;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.devland.coder.R;
 import de.devland.coder.di.ForBackground;
 import de.devland.coder.di.ForMain;
@@ -41,6 +43,7 @@ public class SnippetAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
+        @BindView(R.id.textView_snippet)
         public TextView dataText;
     }
 
@@ -68,9 +71,8 @@ public class SnippetAdapter extends BaseAdapter {
             rowView = inflater.inflate(R.layout.item, parent, false);
             // configure view holder
             viewHolder = new ViewHolder();
-            viewHolder.dataText = (TextView) rowView.findViewById(R.id.textView_snippet);
+            ButterKnife.bind(viewHolder, rowView);
             rowView.setTag(viewHolder);
-
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
