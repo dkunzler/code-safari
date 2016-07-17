@@ -1,7 +1,6 @@
 package de.devland.coder.util;
 
 import android.util.Base64;
-import android.util.Log;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -16,6 +15,7 @@ import de.devland.coder.http.File;
 import de.devland.coder.http.GitHubApiService;
 import de.devland.coder.http.GitHubDownloadService;
 import de.devland.coder.http.Repository;
+import de.devland.coder.model.Snippet;
 import lombok.SneakyThrows;
 import okhttp3.ResponseBody;
 
@@ -38,9 +38,9 @@ public class GitHubUtil {
     }
 
     @SneakyThrows(IOException.class)
-    public String getRandomCodeSnippet(int recursionCounter) {
+    public Snippet getRandomCodeSnippet(int recursionCounter) {
         if (recursionCounter > 10) {
-            return "too much recursion";
+            return null;
         }
         recursionCounter++;
 
@@ -72,7 +72,6 @@ public class GitHubUtil {
             randomFile = filesOfRepo.get(fileNumber);
         } while (randomFile == null || !randomFile.getType().equals("blob"));
 
-        Log.d("Tag", repo.getOwner().getLogin() + " " + repo.getName() + " " + masterSha + " " + randomFile.getPath());
         ResponseBody body = gitHubDownloadService.downloadCode(repo.getOwner().getLogin(), repo.getName(), masterSha, randomFile.getPath()).execute().body();
         String fullCode = new String(body.bytes(), Charset.forName("UTF-8"));
         String[] lines = fullCode.split("\\n");
@@ -80,13 +79,20 @@ public class GitHubUtil {
         int startLine = rand.nextInt(lines.length);
         int endLine = Math.min(startLine + defaultPrefs.numberOfLines(), lines.length - 1);
 
-        StringBuilder result = new StringBuilder();
+        StringBuilder content = new StringBuilder();
         for (int i = startLine; i <= endLine; i++) {
-            result.append(lines[i]);
-            result.append("\n");
+            content.append(lines[i]);
+            content.append("\n");
         }
 
-        Log.d("Tag", result.toString());
-        return result.toString();
+        Snippet result = new Snippet();
+        result.setContent(content.toString());
+        result.setCommitId(masterSha);
+        result.setNumberOfLines(endLine - startLine);
+        result.setRepository(repo.getName());
+        result.setUser(repo.getOwner().getLogin());
+        result.setFile(randomFile.getPath());
+
+        return result;
     }
 }

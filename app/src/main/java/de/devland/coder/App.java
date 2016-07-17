@@ -21,7 +21,7 @@ public class App extends Application {
 
     private static App instance;
 
-        @Inject
+    @Inject
     @ForBackground
     protected Handler backgroundHandler;
 
@@ -34,7 +34,9 @@ public class App extends Application {
         instance = this;
         initializeInjector();
         // Create a RealmConfiguration that saves the Realm file in the app's "files" directory.
-        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this).build();
+        RealmConfiguration realmConfig = new RealmConfiguration.Builder(this)
+                .deleteRealmIfMigrationNeeded()
+                .build();
         Realm.setDefaultConfiguration(realmConfig);
     }
 

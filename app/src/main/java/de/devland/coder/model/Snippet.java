@@ -1,5 +1,7 @@
 package de.devland.coder.model;
 
+import java.util.UUID;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import lombok.Getter;
@@ -13,13 +15,13 @@ import lombok.Setter;
 @Setter
 public class Snippet extends RealmObject {
     @PrimaryKey
-    private long id;
+    private String id = UUID.randomUUID().toString();
     private String user;
     private String repository;
+    private String file;
     private String commitId;
-    private String language;
     private int startLine;
     private int numberOfLines;
-    private int elegance;
+    private boolean elegant;
     private String content;
 }

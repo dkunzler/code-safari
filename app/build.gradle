@@ -7,7 +7,7 @@ android {
     buildToolsVersion "24.0.0"
     defaultConfig {
         applicationId "de.devland.jugsaar"
-        minSdkVersion 16
+        minSdkVersion 19
         targetSdkVersion 24
         versionCode 1
         versionName "1.0"
@@ -35,27 +35,30 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
 
+
+    compile files('libs/lombok-api.jar')
+
+
+
+
+
+
     compile 'com.android.support:appcompat-v7:24.0.0'
     compile 'com.android.support:cardview-v7:24.0.0'
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha3'
-
-    compile files('libs/lombok-api.jar')
-    apt 'org.projectlombok:lombok:1.16.8'
-
     compile 'com.squareup.retrofit2:retrofit:2.1.0'
     compile 'com.squareup.retrofit2:converter-moshi:2.1.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
-
     compile 'com.lorentzos.swipecards:library:1.0.9@aar'
-
     compile 'com.google.dagger:dagger:2.5'
-    apt 'com.google.dagger:dagger-compiler:2.5'
-
     compile 'de.devland.esperandro:esperandro-api:2.3.1'
-    apt 'de.devland.esperandro:esperandro:2.3.1'
-
     compile 'com.jakewharton:butterknife:8.2.1'
-    apt 'com.jakewharton:butterknife-compiler:8.2.1'
-
+    compile 'com.android.support:support-v4:24.0.0'
+    compile 'com.android.support:recyclerview-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
     testCompile 'junit:junit:4.12'
+    apt 'org.projectlombok:lombok:1.16.8'
+    apt 'com.google.dagger:dagger-compiler:2.5'
+    apt 'de.devland.esperandro:esperandro:2.3.1'
+    apt 'com.jakewharton:butterknife-compiler:8.2.1'
 }

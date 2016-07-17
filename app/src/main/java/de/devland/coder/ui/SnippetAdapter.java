@@ -16,6 +16,7 @@ import butterknife.ButterKnife;
 import de.devland.coder.R;
 import de.devland.coder.di.ForBackground;
 import de.devland.coder.di.ForMain;
+import de.devland.coder.model.Snippet;
 import de.devland.coder.util.GitHubUtil;
 
 /**
@@ -43,6 +44,8 @@ public class SnippetAdapter extends BaseAdapter {
     }
 
     public static class ViewHolder {
+        public Snippet snippet;
+
         @BindView(R.id.textView_snippet)
         public TextView dataText;
     }
@@ -81,12 +84,13 @@ public class SnippetAdapter extends BaseAdapter {
         backgroundHandler.post(new Runnable() {
             @Override
             public void run() {
-                final String snippet = gitHubUtil.getRandomCodeSnippet(0);
+                final Snippet snippet = gitHubUtil.getRandomCodeSnippet(0);
                 mainHandler.post(new Runnable() {
                     @Override
                     public void run() {
                         progressDialog.hide();
-                        viewHolder.dataText.setText(snippet);
+                        viewHolder.snippet = snippet;
+                        viewHolder.dataText.setText(snippet.getContent());
                     }
                 });
             }
