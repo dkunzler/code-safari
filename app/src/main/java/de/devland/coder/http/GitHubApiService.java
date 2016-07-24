@@ -17,7 +17,7 @@ public interface GitHubApiService {
 
     int MAX_RESULTS_PER_PAGE = 100;
 
-    String TOKEN = "d50e1add6a11e730cea54b79c4d77ee478dcd240";
+    String TOKEN = "<insert Github API Token here>";
 
     @GET("/repositories")
     Call<List<Repository>> getRepos(@Header("Authorization") String auth, @Query("since") int since);
